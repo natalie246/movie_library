@@ -1,54 +1,40 @@
-// const initState = {
-//
-// }
+import uuidv1 from "uuid/v1";
 
 const initState={
     movies:[],
-    currentMovie:{}
-}
+};
 
 export default function searchReducer(state = initState, action) {
-
-    let obj = Object.assign({},state);
     switch (action.type) {
 
         case 'updateMovieList':
-
-            action.payload.map((item,index)=>{
-
-                item.id=index
-            })
-            obj.movies =  (action.payload)
-            return  obj//action.payload;
-            break;
-
-        case 'updateCurrentMovie':
-
-            obj.currentMovie = (action.payload)
-
-            return obj
-            break;
-
+            const movies = action.payload.map((movie)=> { //uuid lib
+                return {
+                    id : uuidv1(),
+                    Title: movie.Title,
+                    Year: movie.Year,
+                    Director: movie.Director,
+                    Genre: movie.Genre,
+                    Runtime: movie.Runtime,
+                    Poster: movie.Poster || ''
+                }
+            });
+            return {...state, movies};
         case 'addMovie':
-            const movieToAdd = action.payload;
-
-            obj.movies.push(movieToAdd);
-            return obj;
+            const updatedMovies = [...state.movies, action.payload];
+            return {movies: updatedMovies};
         case 'removeMovie':
-            const id = action.payload;
-            obj.movies = obj.movies.filter(movie => movie.id !== id);
-            return obj
+            const filtered = state.movies.filter(movie => movie.id !== action.payload);
+            return {movies: filtered};
         case 'updateMovie':
-
-            const movie = action.payload;
-
-            const filteredState = obj.movies.filter(_movie => _movie.id !== movie.id);
-
-            obj.movies = [...filteredState, movie];
-
-
-            return obj
-        default:
-            return obj;
+            const updatedMovieList = state.movies.map(movie => {
+                if (movie.id === action.payload.id) {
+                    movie = action.payload;
+                }
+                return movie;
+            });
+            return {movies: [...updatedMovieList, action.payload]};
+           default:
+            return state;
     }
 }
