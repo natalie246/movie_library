@@ -140,7 +140,6 @@ class App extends Component {
 
 
         const dialogStyle = function() {
-
             let top = 50
             let left = 50
 
@@ -264,7 +263,6 @@ class App extends Component {
                                 <label>Title:</label>
                                 <input type={'text'} defaultValue={this.state.currentMovie.Title}
                                        onBlur={(e)=> {
-                                           console.log(e.target.value);
                                            title = e.target.value
                                        }
                                        }></input>

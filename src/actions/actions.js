@@ -6,8 +6,6 @@ export const updateMovieList = (movies) => {
 };
 
 export const updateCurrentMovie = (movie) => {
-    console.log("updateCurrentMovie movie:");
-
     return {
         type: 'updateCurrentMovie',
         payload: movie
