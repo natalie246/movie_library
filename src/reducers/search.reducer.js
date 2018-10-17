@@ -19,7 +19,7 @@ export default function searchReducer(state = initState, action) {
                     Poster: movie.Poster || ''
                 }
             });
-            return {...state, movies};
+            return {movies: movies};
         case 'addMovie':
             const updatedMovies = [...state.movies, action.payload];
             return {movies: updatedMovies};
@@ -33,7 +33,7 @@ export default function searchReducer(state = initState, action) {
                 }
                 return movie;
             });
-            return {movies: [...updatedMovieList, action.payload]};
+            return {movies: updatedMovieList};
            default:
             return state;
     }

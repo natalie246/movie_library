@@ -7,9 +7,16 @@ import {updateCurrentMovie} from './actions/actions'
 import {updateMovie} from './actions/actions'
 import {removeMovie} from './actions/actions'
 import {addMovie} from './actions/actions'
-import {Modal} from 'react-bootstrap';
+import {Modal,ListGroup,ListGroupItem, Button} from 'react-bootstrap';
 import uuidv1 from 'uuid/v1';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGhost,faTrash,faEdit,faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
+library.add(faGhost)
+library.add(faTrash)
+library.add(faEdit)
+library.add(faPlusSquare)
 
 const fetchCall = (url) => {
     return fetch(url)
@@ -30,25 +37,25 @@ class App extends Component {
         }
     }
 
-    closeEdit () {
+    closeEdit  =()=> {
         this.setState({ showEditModal: false });
     }
-    openEdit() {
+    openEdit =()=> {
         this.setState({ showEditModal: true});
     }
 
-    closeDelete() {
+    closeDelete =()=> {
         this.setState({ showDeleteModal: false });
     }
-    openDelete(){
+    openDelete =()=>{
         this.setState({ showDeleteModal: true });
     }
 
-    closeAdd(){
+    closeAdd =()=>{
         this.setState({ showAddModal: false });
     }
-    openAdd(id){
-        this.setState({ showAddModal: true, id });
+    openAdd =()=>{
+        this.setState({ showAddModal: true });
     }
 
     componentDidMount() {
@@ -88,27 +95,30 @@ class App extends Component {
         return this.props.movies.map((movie,i) => {
 
             return (
-                <li style={{listStyle:'none'}}
+                <ListGroupItem style={{height:'60px'}}
                     key={'user'+i}>
-                    <img width='20px'  src={movie.Poster} />
-                    {movie.Title}
-                    Year: {movie.Year}
-                    Runtime: {movie.Runtime}
-                    Director: {movie.Director}
-                    Genre: {movie.Genre}
-                    <button onClick={e=>{
+                    <span style={{marginTop: '10px', marginLeft:'50px', float:'left'}}><img width='20px'  src={movie.Poster} /></span>
+                    <span style={{marginTop: '10px', marginLeft:'50px', float:'left'}}>{movie.Title}</span>
+                    <span style={{marginTop: '10px', marginLeft:'50px', float:'left'}}> {movie.Year}</span>
+                    <span style={{marginTop: '10px', marginLeft:'50px', float:'left'}}> {movie.Runtime}</span>
+                    <span style={{marginTop: '10px', marginLeft:'50px', float:'left'}}> {movie.Director}</span>
+                    <span style={{marginTop: '10px', marginLeft:'50px', float:'left'}}> {movie.Genre}</span>
+                    <div style={{display:'inline'}} onClick={e=>{
                         this.setState({currentMovie: movie});
                         this.openEdit();
                     }
-                    }>Edit</button>
+                    }>
+                        <FontAwesomeIcon style={{float:'right'}} icon="edit" />
+                    </div>
 
-                    <button onClick={e => {
+                    <div style={{display:'inline'}} onClick={e => {
                         this.setState({id: movie.id});
                         this.openDelete();
                     }
 
-                    }>Delete</button>
-                </li>
+                    }> <FontAwesomeIcon style={{float:'right', marginRight:'10px'}} icon="trash" />
+                    </div>
+                </ListGroupItem>
             );
         });
     }
@@ -127,6 +137,7 @@ class App extends Component {
             backgroundColor: '#000',
             opacity: 0.5
         };
+
 
         const dialogStyle = function() {
 
@@ -153,13 +164,16 @@ class App extends Component {
 
         return (
             <div className="App">
-                <h1>Movie Library</h1>
 
-                <button onClick={e=>{
+
+
+                <div style={{marginBottom:'40px',marginTop:'20px',}} onClick={e=>{
                     e.preventDefault()
                     this.setState({showAddModal:true})
 
-                }}>Add Movie</button>
+                }}>
+                    <FontAwesomeIcon icon="plus-square" /> Add Movie
+                </div>
 
                 <Modal
                     aria-labelledby='modal-label'
@@ -223,18 +237,24 @@ class App extends Component {
 
                     </div>
                 </Modal>
+
+
+
                 {this.props.movies.length > 0 &&
-                <ul>
-                    {this.renderList()}
-                </ul>
+
+                <ListGroup>
+
+                   {this.renderList()}
+                </ListGroup>
                 }
+
 
                 <Modal
                     aria-labelledby='modal-label'
                     style={modalStyle}
                     backdropStyle={backdropStyle}
                     show={this.state.showEditModal}
-                    onHide={this.close}
+                    onHide={this.closeEdit}
                 >
                     <div style={dialogStyle()} >
                         <h4 id='modal-label'>Movie details:</h4>
